@@ -1,0 +1,206 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+enum genres { HOMME, FEMME }
+
+enum roles { MARKETER, SONDEEUR, CA }
+
+class Formulaire extends StatelessWidget {
+  //
+  Map<dynamic, dynamic> user = {};
+  //
+  //
+  //
+  //var agentController = Get.find();
+  //
+  var genre = genres.HOMME;
+  var role = roles.SONDEEUR;
+  //
+  final formKey = GlobalKey<FormState>();
+  final nom = TextEditingController();
+  final postnom = TextEditingController();
+  final prenom = TextEditingController();
+  final adresse = TextEditingController();
+  final numero = TextEditingController();
+  final email = TextEditingController();
+  final mdp = TextEditingController();
+  final etatcivil = TextEditingController();
+  final majeur = TextEditingController();
+  //
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Formulaire evenement"),
+      ),
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        child: Form(
+            key: formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: SingleChildScrollView(
+              controller: ScrollController(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: nom,
+                    validator: (e) {
+                      if (e!.isEmpty) {
+                        return "Veuilliez inserer le nom";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.person), hintText: "Nom"),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: postnom,
+                    validator: (e) {
+                      if (e!.isEmpty) {
+                        return "Veuilliez inserer le postnom";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.person), hintText: "Postnom"),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    controller: prenom,
+                    validator: (e) {
+                      if (e!.isEmpty) {
+                        return "Veuilliez inserer le prenom";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.person), hintText: "Prenom"),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: adresse,
+                    validator: (e) {
+                      if (e!.isEmpty) {
+                        return "Veuilliez inserer l'adresse";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.map_rounded), hintText: "Adresse"),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    controller: numero,
+                    keyboardType: TextInputType.number,
+                    validator: (e) {
+                      if (e!.isEmpty) {
+                        return "Veuilliez inserer votre numéro de téléphone";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.phone_android),
+                        hintText: "Numero de téléphone"),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.alternate_email), hintText: "Email"),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    controller: mdp,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.vpn_key_outlined),
+                        hintText: "Mot de passe"),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  StatefulBuilder(builder: (context, t) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Genre",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        RadioListTile(
+                            value: genres.FEMME,
+                            title: Text("Femme"),
+                            groupValue: genre,
+                            onChanged: (genres? s) {
+                              t() {}
+                              ;
+                            }),
+                        RadioListTile(
+                            value: genres.HOMME,
+                            title: Text("Homme"),
+                            groupValue: genre,
+                            onChanged: (genres? s) {
+                              genre = s!;
+                            }),
+                      ],
+                    );
+                  }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Map<String, dynamic> a = {
+                          "id": "${user['id']}",
+                          "nom": nom.text,
+                          "postnom": postnom.text,
+                          "prenom": prenom.text,
+                          "genre": genre.name,
+                          "adresse": adresse.text,
+                          "numero": numero.text,
+                          "email": email.text,
+                          "role": role.name,
+                          "mdp": mdp.text,
+                          "idboutique": 0
+                        };
+                        Get.dialog(Container(
+                          height: 40,
+                          width: 40,
+                          child: const CircularProgressIndicator(),
+                          alignment: Alignment.center,
+                        ));
+                        //
+                        //agentController.miseAjour(a);
+                        //agentController.listage();
+                      }
+                    },
+                    child: const Text("Mettre à jour"),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+}

@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:barjo/pages/event/allcontacts.dart';
@@ -10,13 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:http/http.dart' as http;
 //import 'package:qr_flutter/qr_flutter.dart';
-import 'package:widget_to_image/widget_to_image.dart';
+//import 'package:widget_to_image/widget_to_image.dart';
 
 //
 RxList listeTable = [
@@ -92,7 +96,7 @@ class _DetailsEvent extends State<DetailsEvent> {
         actions: [
           PopupMenuButton<String>(
             child: const Icon(
-              Icons.more_vert,
+              Icons.filter,
               color: Colors.white,
             ),
             itemBuilder: (c) {
@@ -621,14 +625,16 @@ class _DetailsEvent extends State<DetailsEvent> {
                         heroTag: "pdf",
                         onPressed: () async {
                           //
-                          Get.dialog(Container(
-                            height: 40,
-                            width: 40,
-                            child: const CircularProgressIndicator(),
-                            alignment: Alignment.center,
-                          ));
+                          // Get.dialog(Container(
+                          //   height: 40,
+                          //   width: 40,
+                          //   child: const CircularProgressIndicator(),
+                          //   alignment: Alignment.center,
+                          // ));
+
                           //
                           late List<FileSystemEntity> _folders;
+                          /*
                           Future<void> getDir() async {
                             final directory =
                                 await getExternalStorageDirectories(
@@ -642,56 +648,25 @@ class _DetailsEvent extends State<DetailsEvent> {
                             // });
                             print(myDir.path);
                           }
-
+                          */
                           //
+
                           // storage permission ask
                           var status = await Permission.storage.status;
                           if (!status.isGranted) {
                             await Permission.storage.request();
+                            //
                           }
-                          //getDir();
+                          showDialog(
+                            context: context,
+                            builder: (c) {
+                              return Material(
+                                color: Colors.white,
+                                child: LoaderPrinter(),
+                              );
+                            },
+                          );
                           //
-                          load(Map infos) async {
-                            //
-                            var cles = GlobalKey();
-                            final qrValidationResult = QrValidator.validate(
-                              data: jsonEncode(infos),
-                              version: QrVersions.auto,
-                              errorCorrectionLevel: QrErrorCorrectLevel.L,
-                            );
-                            //
-                            final qrCode = qrValidationResult.qrCode;
-                            //
-                            final painter = QrPainter.withQr(
-                              qr: qrCode!,
-                              color: const Color(0xFF000000),
-                              gapless: true,
-                              embeddedImageStyle: null,
-                              embeddedImage: null,
-                            );
-                            //
-                            final data = await painter.toImageData(2048,
-                                format: ui.ImageByteFormat.png);
-                            //
-                            List<Directory>? paths =
-                                await getExternalStorageDirectories(
-                                    type: StorageDirectory.documents);
-                            File("/storage/emulated/0/DCIM/INVITATION_${infos["nom"]}.png")
-                                .writeAsBytes(
-                              data!.buffer.asUint8List(
-                                  data.offsetInBytes, data.lengthInBytes),
-                            );
-                            //
-                            print(
-                                "/storage/emulated/0/DCIM/INVITATION_${infos["nom"]}.png");
-                          }
-
-                          //
-                          eventController.listeParticipants.forEach((element) {
-                            load(element);
-                          });
-
-                          Get.back();
                         },
                         child: const Icon(Icons.picture_as_pdf_outlined),
                       ),
@@ -764,6 +739,14 @@ class _DetailsEvent extends State<DetailsEvent> {
       ),
     );
   }
+
+  //
+  void mainHandler(dynamic data, SendPort isolateSendPort) {
+    if (data == "coupe") {
+      Get.back();
+    }
+  }
+  //
 }
 
 class TableManager extends StatefulWidget {
@@ -929,5 +912,116 @@ class _TableManager extends State<TableManager> {
             ),
           ),
         ));
+  }
+}
+
+class LoaderPrinter extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _LoaderPrinter();
+  }
+}
+
+class _LoaderPrinter extends State<LoaderPrinter> {
+  static test(List o) {
+    print("Je suis dans un theadre...");
+    int count = 0;
+    SendPort sendPort = o[0] as SendPort;
+    List listeParticipants = o[1];
+    //https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example
+    load(Map infos) async {
+      //
+      //var cles = GlobalKey();
+      // final qrValidationResult = QrValidator.validate(
+      //   data: jsonEncode(infos),
+      //   version: QrVersions.auto,
+      //   errorCorrectionLevel: QrErrorCorrectLevel.L,
+      // );
+      //
+      // final qrCode = qrValidationResult.qrCode;
+      // //
+      // final painter = QrPainter.withQr(
+      //   qr: qrCode!,
+      //   color: const Color(0xFF000000),
+      //   gapless: true,
+      //   embeddedImageStyle: null,
+      //   embeddedImage: null,
+      // );
+      // //
+      // // WidgetsToImageController to access widget
+      // // to save image bytes of widget
+      // Uint8List? bytes;
+      //
+      //final data =
+      //  await painter.toImageData(2048, format: ui.ImageByteFormat.png);
+      //
+      //File("/storage/emulated/0/DCIM/INVITATION_${infos["nom"]}.png");
+
+      var url = Uri.parse(
+          "https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${jsonEncode(infos)}");
+      var response = await http.get(url);
+      var data = response.bodyBytes;
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      var myFile =
+          File("/storage/emulated/0/DCIM/INVITATION_${infos["nom"]}.png")
+              .writeAsBytes(
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      );
+
+      //print("/storage/emulated/0/DCIM/INVITATION_${infos["nom"]}.png");
+    }
+    //listeParticipants.
+
+    listeParticipants.forEach((element) {
+      load(element);
+      sendPort.send(1);
+    });
+    //
+    //sendPort.send(1);
+  }
+
+  Future<int> isEven() {
+    //
+    //
+    return Future.value(1);
+  }
+
+  //
+  ReceivePort receivePort = ReceivePort();
+  //
+  List l = [];
+  //
+  RxInt nombre = 0.obs;
+
+  @override
+  void initState() {
+    //
+    super.initState();
+    //
+    EventController eventController = Get.find();
+    var box = GetStorage();
+    l = box.read("liste_participant");
+    print(l);
+    print(l.runtimeType);
+    Isolate.spawn(test, [receivePort.sendPort, l]);
+    //
+    receivePort.listen((data) {
+      nombre.value += data as int;
+      print('Receiving: $data ');
+      //
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Obx(
+          () => Text("Nombre généré: $nombre/${l.length}"),
+        ),
+      ),
+    );
   }
 }

@@ -567,6 +567,39 @@ class _DetailsEvent extends State<DetailsEvent> {
                                   child: const Text("Tables"),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  //
+                                  var status = await Permission.storage.status;
+                                  if (!status.isGranted) {
+                                    await Permission.storage.request();
+                                    //
+                                  } else {
+                                    //
+                                    var box = GetStorage();
+                                    List l = box.read("liste_participant");
+                                    //
+                                    Directory appDocDir =
+                                        await getApplicationDocumentsDirectory();
+                                    String appDocPath = appDocDir.path;
+                                    print(appDocPath);
+
+                                    ///storage/emulated/0/DCIM/
+                                    File myFile = await File(
+                                            "/storage/emulated/0/Documents/DB_Event_${widget.e["nom"]}.txt")
+                                        .create(recursive: true);
+                                    myFile.writeAsStringSync(jsonEncode(l));
+                                  }
+                                },
+                                child: Container(
+                                  width: 250,
+                                  alignment: Alignment.center,
+                                  child: const Text("Générer les tables"),
+                                ),
+                              ),
                             ],
                           ),
               ),
@@ -621,6 +654,16 @@ class _DetailsEvent extends State<DetailsEvent> {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      // FloatingActionButton(
+                      //   heroTag: "db",
+                      //   onPressed: () async {
+
+                      //   },
+                      //   child: const Icon(Icons.data_array),
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
                       FloatingActionButton(
                         heroTag: "pdf",
                         onPressed: () async {
@@ -760,158 +803,158 @@ class _TableManager extends State<TableManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Table"),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        title: const Text("Table"),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
           ),
         ),
-        body: Obx(
-          () => ListView(
-            children: List.generate(listeTable.length, (index) {
-              var table = listeTable[index];
-              return ListTile(
-                leading: const Icon(Icons.tab),
-                title: Text("${table["nom"]}"),
-                subtitle: Text("${table["numero"]}"),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red.shade700,
-                  ),
-                  onPressed: () {
-                    listeTable[index]["nom"] != "TOUS"
-                        ? listeTable.removeAt(index)
-                        : Get.snackbar("Erreur", "Ne peut-etre supprimée.");
-                  },
+      ),
+      body: Obx(
+        () => ListView(
+          children: List.generate(listeTable.length, (index) {
+            var table = listeTable[index];
+            return ListTile(
+              leading: const Icon(Icons.tab),
+              title: Text("${table["nom"]}"),
+              subtitle: Text("${table["numero"]}"),
+              trailing: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red.shade700,
                 ),
-              );
-            }),
+                onPressed: () {
+                  listeTable[index]["nom"] != "TOUS"
+                      ? listeTable.removeAt(index)
+                      : Get.snackbar("Erreur", "Ne peut-etre supprimée.");
+                },
+              ),
+            );
+          }),
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 45,
+        child: ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (c) {
+                TextEditingController nomTable = TextEditingController();
+                //
+                TextEditingController numTable = TextEditingController();
+                //
+
+                return AlertDialog(
+                  content: SizedBox(
+                    height: 200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text("Nouvelle table"),
+                        SizedBox(
+                          height: 50,
+                          child: TextField(
+                            controller: nomTable,
+                            decoration: const InputDecoration(
+                              hintText: "Nom de la table",
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: TextField(
+                            controller: numTable,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              hintText: "Numéro de table",
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (nomTable.text.isNotEmpty &&
+                                        numTable.text.isNotEmpty) {
+                                      if (!listeTable.contains({
+                                        {
+                                          "nom": nomTable.text,
+                                          "numero": numTable.text
+                                        }
+                                      })) {
+                                        listeTable.add({
+                                          "nom": nomTable.text,
+                                          "numero": numTable.text
+                                        });
+                                      } else {
+                                        Get.snackbar(
+                                            "Erreur", "Cette table exist déjà");
+                                      }
+                                    }
+                                    //
+                                    Get.back();
+                                  },
+                                  child: const Text("Ajouter"),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Colors.red.shade700,
+                                    ),
+                                  ),
+                                  child: const Text("Annuler"),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: Container(
+            width: 250,
+            //height: 50,
+            alignment: Alignment.center,
+            child: const Text("Ajouter une Table"),
           ),
         ),
-        bottomNavigationBar: SizedBox(
-          height: 45,
-          child: ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (c) {
-                  TextEditingController nomTable = TextEditingController();
-                  //
-                  TextEditingController numTable = TextEditingController();
-                  //
-
-                  return AlertDialog(
-                    content: SizedBox(
-                      height: 200,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Text("Nouvelle table"),
-                          SizedBox(
-                            height: 50,
-                            child: TextField(
-                              controller: nomTable,
-                              decoration: const InputDecoration(
-                                hintText: "Nom de la table",
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            child: TextField(
-                              controller: numTable,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                hintText: "Numéro de table",
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      if (nomTable.text.isNotEmpty &&
-                                          numTable.text.isNotEmpty) {
-                                        if (!listeTable.contains({
-                                          {
-                                            "nom": nomTable.text,
-                                            "numero": numTable.text
-                                          }
-                                        })) {
-                                          listeTable.add({
-                                            "nom": nomTable.text,
-                                            "numero": numTable.text
-                                          });
-                                        } else {
-                                          Get.snackbar("Erreur",
-                                              "Cette table exist déjà");
-                                        }
-                                      }
-                                      //
-                                      Get.back();
-                                    },
-                                    child: const Text("Ajouter"),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        Colors.red.shade700,
-                                      ),
-                                    ),
-                                    child: const Text("Annuler"),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Container(
-              width: 250,
-              //height: 50,
-              alignment: Alignment.center,
-              child: const Text("Ajouter une Table"),
-            ),
-          ),
-        ));
+      ),
+    );
   }
 }
 

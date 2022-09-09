@@ -1,7 +1,6 @@
 import 'package:barjo/pages/actualites/actualite.dart';
 import 'package:barjo/pages/event/event.dart';
 import 'package:barjo/pages/profil/profil.dart';
-import 'package:barjo/pages/scanner/profil_invite.dart';
 import 'package:barjo/pages/scanner/scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:country_code_picker/country_code.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -23,129 +25,213 @@ class _Profil extends State<Profil> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Obx(
-              () => CheckboxListTile(
-                value: dejaLog.value,
-                title: const Text("J'ai déjà un compte"),
-                subtitle: const Text("J'ai déjà un compte"),
-                dense: true,
-                onChanged: (e) {
-                  dejaLog.value = e!;
-                },
+    return Scaffold(
+      backgroundColor: Colors.yellow.shade700,
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const SizedBox(
+                          height: 100,
+                          width: 100,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Container(),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    "Josué Baraka",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "+243 81 567 3456",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Obx(
-              () => dejaLog.value
-                  ? Container()
-                  : TextFormField(
-                      controller: nom,
-                      decoration: const InputDecoration(
-                        hintText: 'Nom complet',
-                        labelText: 'Nom complet',
+          ),
+          Expanded(
+            flex: 4,
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Scan my Gold Class QR Code",
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Card(
+                    elevation: 2,
+                    color: Colors.yellow.shade700,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SizedBox(
+                      height: Get.size.height / 6,
+                      width: Get.size.width / 3,
+                      child: Icon(
+                        Icons.qr_code,
+                        color: Colors.black,
+                        size: 120,
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Entrez votre mot de passe';
-                        }
-
-                        return null;
-                      },
                     ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: CountryCodePicker(
-                    onChanged: (p) {
-                      countryCode = p;
-                      print(p.code);
-                      print(p.dialCode);
-                      print(p.name);
-                      print(p.flagUri);
-                    },
-                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                    initialSelection: 'CD',
-                    favorite: ['+243', 'FR'],
-                    // optional. Shows only country name and flag
-                    showCountryOnly: false,
-                    // optional. Shows only country name and flag when popup is closed.
-                    showOnlyCountryWhenClosed: false,
-                    // optional. aligns the flag and the Text left
-                    alignLeft: false,
                   ),
-                ),
-                Expanded(
-                  flex: 9,
-                  child: TextFormField(
-                    controller: phone,
-                    decoration: const InputDecoration(
-                      hintText: 'Phone',
-                      labelText: 'Phone',
+                  SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "GOLD CLASS ID",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Entrez votre mot de passe';
-                      }
-
-                      return null;
-                    },
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "JHJ7UBJH",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ListTile(
+                    onTap: () {},
+                    title: const Text(
+                      "My Ticket",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    title: const Text(
+                      "Favoris",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    title: const Text(
+                      "Settings",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    title: const Text(
+                      "Aide et support",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                // if (_formKey.currentState!.validate()) {
-                //   /*
-                //           Timer(const Duration(seconds: 4), () {
-                //             Get.snackbar("Correct", "Un simple message!");
-                //           });
-                //           */
-                //   //Get.off(Accueil());
-                //   loginController.code.value = false;
-                //   //
-                //   Get.dialog(
-                //     const Center(
-                //       child: SizedBox(
-                //         height: 30,
-                //         width: 30,
-                //         child: CircularProgressIndicator(),
-                //       ),
-                //     ),
-                //     name: "Attente...",
-                //   );
-
-                //   //
-                //   // if (dejaLog.value) {
-                //   //   loginController.log(
-                //   //       "${countryCode.code}", phone.text, '', dejaLog.value);
-                //   // } else {
-                //   //   loginController.log("${countryCode.code}", phone.text,
-                //   //       nom.text, dejaLog.value);
-                //   // }
-                //   //
-                //   //splashController.seLoger(true);
-                // }
-              },
-              child: const Text("Valider"),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

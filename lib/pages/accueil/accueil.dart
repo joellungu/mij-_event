@@ -25,9 +25,9 @@ class Accueil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("MJI Event"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("MJI Event"),
+      // ),
       body: Obx(() {
         if (index.value == 0) {
           return Actualite();
@@ -39,38 +39,38 @@ class Accueil extends StatelessWidget {
           return Profil();
         }
       }),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          onTap: (e) {
-            //
-            index.value = e;
-            //
-          },
-          //fixedColor: Colors.grey,
-          unselectedItemColor: Colors.grey,
-          backgroundColor: Colors.grey,
-          selectedItemColor: Colors.black,
-          currentIndex: index.value,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Accueil",
-            ),
-            BottomNavigationBarItem(
-                activeIcon: Icon(CupertinoIcons.calendar),
-                icon: Icon(CupertinoIcons.calendar),
-                label: "My Event"),
-            BottomNavigationBarItem(
-                activeIcon: Icon(CupertinoIcons.qrcode),
-                icon: Icon(CupertinoIcons.qrcode),
-                label: "Scanner"),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "Profile",
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: Obx(
+      //   () => BottomNavigationBar(
+      //     onTap: (e) {
+      //       //
+      //       index.value = e;
+      //       //
+      //     },
+      //     //fixedColor: Colors.grey,
+      //     unselectedItemColor: Colors.grey,
+      //     backgroundColor: Colors.grey,
+      //     selectedItemColor: Colors.black,
+      //     currentIndex: index.value,
+      //     items: const [
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.home),
+      //         label: "Accueil",
+      //       ),
+      //       BottomNavigationBarItem(
+      //           activeIcon: Icon(CupertinoIcons.calendar),
+      //           icon: Icon(CupertinoIcons.calendar),
+      //           label: "My Event"),
+      //       BottomNavigationBarItem(
+      //           activeIcon: Icon(CupertinoIcons.qrcode),
+      //           icon: Icon(CupertinoIcons.qrcode),
+      //           label: "Scanner"),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.person),
+      //         label: "Profile",
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:barjo/pages/event/event_controller.dart';
+//import 'package:barjo/pages/event/event_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'MJI Event',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: Splash(),
     );

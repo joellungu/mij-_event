@@ -36,7 +36,7 @@ class MyEvent extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              subtitle: Text("${e["datedebut"]}"),
+              subtitle: Text("${e["datedebut"]}\n${e["heuredebut"]}"),
               trailing: const Icon(
                 Icons.edit,
                 color: Colors.grey,

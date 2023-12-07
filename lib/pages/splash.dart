@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:barjo/pages/accueil/accueil.dart';
+import 'package:mijevent/pages/accueil/accueil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

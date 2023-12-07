@@ -1,4 +1,4 @@
-package com.example.barjo
+package com.example.mijevent
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
-import 'package:barjo/pages/event/formulaire.dart';
-import 'package:barjo/pages/event/invitation.dart';
-import 'package:barjo/pages/event/myevent.dart';
+import 'package:mijevent/pages/event/formulaire.dart';
+import 'package:mijevent/pages/event/invitation.dart';
+import 'package:mijevent/pages/event/myevent.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +22,7 @@ class _Evenement extends State<Evenement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

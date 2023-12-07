@@ -1,4 +1,4 @@
-import 'package:barjo/pages/details/details.dart';
+import 'package:mijevent/pages/details/details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

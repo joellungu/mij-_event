@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:barjo/pages/event/event_controller.dart';
+import 'package:mijevent/pages/event/event_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';

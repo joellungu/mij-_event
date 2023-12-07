@@ -1,5 +1,5 @@
-import 'package:barjo/pages/profil/profil.dart';
-import 'package:barjo/widgets/carte_produit.dart';
+import 'package:mijevent/pages/profil/profil.dart';
+import 'package:mijevent/widgets/carte_produit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class _Actualite extends State<Actualite> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     controller = TabController(length: 2, vsync: this);
-    // TODO: implement initState
+    //
     super.initState();
   }
 
